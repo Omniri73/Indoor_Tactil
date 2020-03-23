@@ -256,22 +256,6 @@ void setup() {
   }
 
   tft.begin(identifier);
-
-  float h = dht.readHumidity();
-  // Read temperature as Celsius (the default)
-  float t = dht.readTemperature();
-  if (t < temperatureSP.toFloat()) {
-    heaterOn = true;
-  } else {
-    heaterOn = false;
-  }
-
-  if (h > humiditySP.toFloat()) {
-    fanOn = true;
-  } else {
-    fanOn = false;
-  }
-  HomeScreen(String(t), String(h), temperatureSP, humiditySP, heaterOn, fanOn);
 }
 
 #define MINPRESSURE 10
@@ -324,12 +308,32 @@ void loop() {
       Serial.println("menu");
       changeActiveScreenTo(0x01);
       initAllScreens();
-      MenuScreen();
+      MenuScreen(p);
+    } else {
+      float h = dht.readHumidity();
+      // Read temperature as Celsius (the default)
+      float t = dht.readTemperature();
+      if (t < temperatureSP.toFloat()) {
+        heaterOn = true;
+      } else {
+        heaterOn = false;
+      }
+
+      if (h > humiditySP.toFloat()) {
+        fanOn = true;
+      } else {
+        fanOn = false;
+      }
+      HomeScreen(String(t), String(h), temperatureSP, humiditySP, heaterOn,
+                 fanOn, p);
     }
   }
 
   // screen 1 - menu
   else if (screens[1]) {
+
+    MenuScreen(p);
+
     // volver a home
     if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
       Serial.println("BackHome ON");
@@ -350,10 +354,10 @@ void loop() {
         fanOn = false;
       }
       HomeScreen(String(t), String(h), temperatureSP, humiditySP, heaterOn,
-                 fanOn);
+                 fanOn, p);
     }
     // Opcion 1 Button - zona 1
-    else if (p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+    /*else if (p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
       Serial.println("Opcion 1");
       changeActiveScreenTo(0x06);
       initAllScreens();
@@ -372,7 +376,7 @@ void loop() {
       changeActiveScreenTo(0x09);
       initAllScreens();
       Opcion4Screen();
-    }
+    }*/
   }
 
   // screen 2 - settings
@@ -472,7 +476,7 @@ void loop() {
       Serial.println("BackMenu ON");
       changeActiveScreenTo(0x01);
       initAllScreens();
-      MenuScreen();
+      MenuScreen(p);
     }
   }
 
@@ -518,7 +522,7 @@ void loop() {
       Serial.println("BackMenu ON");
       changeActiveScreenTo(0x01);
       initAllScreens();
-      MenuScreen();
+      MenuScreen(p);
     }
   }
 
@@ -529,7 +533,7 @@ void loop() {
       Serial.println("BackMenu ON");
       changeActiveScreenTo(0x01);
       initAllScreens();
-      MenuScreen();
+      MenuScreen(p);
     }
   }
 
@@ -561,7 +565,7 @@ void loop() {
       Serial.println("BackMenu ON");
       changeActiveScreenTo(0x01);
       initAllScreens();
-      MenuScreen();
+      MenuScreen(p);
     }
   }
 
@@ -572,7 +576,7 @@ void loop() {
       Serial.println("BackMenu ON");
       changeActiveScreenTo(0x01);
       initAllScreens();
-      MenuScreen();
+      MenuScreen(p);
     }
   }
 
@@ -676,7 +680,7 @@ void loop() {
   }
 
   // screen 20
-  else if(screens[20]){
+  else if (screens[20]) {
     // volver a zona 2
     if (p.x > 10 && p.x < 230 && p.y > 300 && p.y < 340) {
       Serial.println("BackOpcion2 ON");

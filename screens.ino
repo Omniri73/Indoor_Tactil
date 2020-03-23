@@ -126,7 +126,7 @@ void NumericKeyboardScreen(TSPoint p) {
 /////  Pantalla Principal  /////
 
 void HomeScreen(String temperature, String humidity, String tempSP,
-                String humSP, bool hOn, bool fOn) {
+                String humSP, bool hOn, bool fOn, TSPoint p) {
   if (!screensInit[0]) {
     tft.fillScreen(BLACK);
 
@@ -221,7 +221,7 @@ void HomeScreen(String temperature, String humidity, String tempSP,
 }
 
 /////  Pantalla Menu  /////
-void MenuScreen() {
+void MenuScreen(TSPoint p) {
   if (!screensInit[1]) {
     tft.fillScreen(BLACK);
     tft.setCursor(35, 10);
@@ -263,6 +263,29 @@ void MenuScreen() {
 
     screensInit[1] = true;
   }
+
+  // Opcion 1 Button - zona 1
+  if (p.x > 10 && p.x < 230 && p.y > 55 && p.y < 95) {
+    Serial.println("Opcion 1");
+    changeActiveScreenTo(0x06);
+    initAllScreens();
+    Opcion1Screen();
+  }
+  // Opcion 2 Button - zona 2
+  else if (p.x > 10 && p.x < 230 && p.y > 100 && p.y < 140) {
+    Serial.println("Opcion 2");
+    changeActiveScreenTo(0x07);
+    initAllScreens();
+    Opcion2Screen();
+  }
+  // Opcion 4 Button - opciones
+  else if (p.x > 10 && p.x < 230 && p.y > 190 && p.y < 230) {
+    Serial.println("Opcion 4");
+    changeActiveScreenTo(0x09);
+    initAllScreens();
+    Opcion4Screen();
+  }
+
   delay(250);  // debouncing
 }
 
